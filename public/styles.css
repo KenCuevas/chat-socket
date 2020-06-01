@@ -1,0 +1,84 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font: 13px Helvetica, Arial;
+}
+
+form {
+  background: #000;
+  padding: 3px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+input {
+  border: 0;
+  padding: 10px;
+  width: 90%;
+  margin: 0 0.25%;
+}
+
+button {
+  /* width: 9%; */
+  background: rgb(130, 224, 255);
+  border: none;
+  padding: 10px 3.333%;
+}
+
+#messages {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+#messages li {
+  padding: 5px 10px;
+}
+
+#messages li:nth-child(odd) {
+  background: #eee;
+}
+
+#messages {
+  margin-bottom: 40px;
+}
+
+.container {
+  padding: 3%;
+  background-color: lightgray;
+  border-radius: 25px;
+  height: 50%;
+  width: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+#popup {
+  display: block;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(165, 165, 165, 0.7);
+  position: absolute;
+  top: 0;
+}
+
+.topBar {
+  height: 60px;
+  display: flex;
+  flex-flow: column wrap;
+  /* flex-flow: column wrap; */
+}
+
+.topBar__container {
+  height: 50%;
+}
