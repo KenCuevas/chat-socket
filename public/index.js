@@ -2,6 +2,7 @@
 const socket = io();
 // Id of cuurrent user online.
 let id = undefined;
+let user = undefined;
 // Disable the message input by default because no user has sign in yet
 document.querySelector("#m").disabled = true;
 
@@ -22,7 +23,7 @@ socket.on("add user online", (msg) => addToUsersOnline(msg));
 socket.on("remove user online", (msg) => removeUserOnline(msg));
 
 // Display that the current user is typing when the user start typing in (#m)
-socket.on("typing...", typing());
+socket.on("typing...", (user) => typing(user));
 
 //////////////////////////////////////////////////////////////////////////////////////////
 ///// Functions
@@ -30,7 +31,7 @@ socket.on("typing...", typing());
 
 /**
  * If the user is typing it will emit an event to let know the server that someone is typing.
- * @param {String} username that is typing. 
+ * @param {String} username that is typing.
  */
 function isUserTyping(username) {
   const input = document.getElementById("m").value;
@@ -80,8 +81,12 @@ function addToUsersOnline(message) {
  * @param {String} id of the current user that is online.
  */
 function removeUserOnline(id) {
-  var item = document.getElementById(id);
-  item.parentNode.removeChild(item);
+  try {
+    const item = document.getElementById(id);
+    item.parentNode.removeChild(item);
+  } catch (_) {
+    throw "Error \n The following happend : User leave too early";
+  }
 }
 
 /**
@@ -90,9 +95,11 @@ function removeUserOnline(id) {
  */
 function typing(user) {
   if (user) {
+    console.log("typing");
     const typing = document.getElementById("typing");
     typing.innerHTML = `${user} is typing...`;
   } else {
+    console.log("not");
     const typing = document.getElementById("typing");
     typing.innerHTML = "";
   }
@@ -109,8 +116,8 @@ function userSignInPopup(username) {
   if (display && username) {
     document.querySelector("#m").disabled = false;
     document.querySelector("#popup").style.display = "none";
+    user = username;
   }
-  setInterval(isUserTyping(user), 5000);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +129,6 @@ document.querySelector("#container").addEventListener("submit", (e) => {
   e.preventDefault();
   const nickname = document.querySelector("#nickname").value;
   userSignInPopup(nickname);
-  user = nickname;
   socket.emit("user connected", nickname);
 });
 
@@ -135,6 +141,7 @@ document.querySelector("#form").addEventListener("submit", (e) => {
   document.querySelector("#m").value = "";
 });
 
+setInterval(() => isUserTyping(user), 5000);
 // DONE ✅
 // [x] Broadcast a message to connected users when someone connects or disconnects.
 // [x] Don’t send the same message to the user that sent it himself. Instead, append the message directly as soon as he presses enter.
